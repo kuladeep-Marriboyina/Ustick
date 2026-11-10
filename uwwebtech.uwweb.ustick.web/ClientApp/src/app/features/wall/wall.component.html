@@ -2,7 +2,6 @@
   <!-- compact top bar -->
   <div class="tw-top" *ngIf="wall">
     <div class="tw-left">
-      <h1>The Wall</h1>
       <div class="tabs">
         <button class="tab" [class.active]="activeTab === 'wall'" (click)="activeTab = 'wall'">
           Wall <span class="tab-count">{{ wall.stuckCount }}</span>
