@@ -1,0 +1,141 @@
+@import 'assets/css/colors';
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 17, 21, 0.44);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 80;
+  padding: 20px;
+  animation: fade 0.18s ease both;
+}
+
+.dialog {
+  width: 100%;
+  max-width: 560px;
+  background: $surface;
+  border-radius: 20px;
+  box-shadow: $shadow-lg;
+  overflow: hidden;
+  animation: pop 0.24s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.dialog-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 24px 16px;
+  gap: 16px;
+
+  .subject { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: $faint; }
+  h3 { margin: 5px 0 0; font-size: 20px; }
+}
+
+.head-ring { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.ring-cap { font-size: 10.5px; color: $faint; text-transform: uppercase; letter-spacing: 0.06em; }
+
+.ring.big {
+  position: relative; width: 48px; height: 48px;
+  svg { transform: rotate(-90deg); }
+  .t { fill: none; stroke: $line; stroke-width: 4.5; }
+  .v {
+    fill: none; stroke: $accent; stroke-width: 4.5; stroke-linecap: round;
+    transition: stroke-dashoffset 0.7s cubic-bezier(0.34, 1.3, 0.5, 1), stroke 0.4s ease;
+  }
+  .ring-pct {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800; color: $text;
+  }
+  &.full .v { stroke: $green; }
+  &.full .ring-pct { color: $green; }
+}
+
+.progress-line {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 24px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: $faint;
+  border-bottom: 1px solid $line;
+}
+
+.body { padding: 20px 24px 24px; }
+.body.center { text-align: center; color: $muted; padding: 50px; }
+
+.stem { margin: 2px 0 16px; font-size: 15px; font-weight: 600; color: $ink; line-height: 1.4; }
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  background: $surface;
+  border: 1.5px solid $line-strong;
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: border-color 0.14s ease, background 0.14s ease;
+
+  &:hover:not(:disabled) { border-color: $accent; background: $accent-soft; }
+  &:disabled { cursor: default; }
+
+  .opt-key {
+    flex: 0 0 auto; width: 24px; height: 24px; border-radius: 7px;
+    background: $surface-2; color: $muted; font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .opt-text { flex: 1; font-size: 13.5px; color: $text; }
+  .opt-mark { font-weight: 800; color: $green; }
+  .opt-mark.wrong { color: $red; }
+
+  &.is-picked { border-color: $accent; background: $accent-soft; }
+  &.is-correct { border-color: $green; background: $stage-master-soft; .opt-key { background: $green; color: #fff; } }
+  &.is-wrong   { border-color: $red; background: $stage-weak-soft; .opt-key { background: $red; color: #fff; } }
+  &.is-dim     { opacity: 0.55; }
+}
+
+.feedback {
+  margin-top: 6px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: $stage-weak-soft;
+  border: 1px solid #F6D3D4;
+
+  &.good { background: $stage-master-soft; border-color: #C9ECD9; }
+
+  .fb-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+  .fb-title { font-size: 13.5px; font-weight: 800; color: $ink; }
+  .fb-points { font-size: 12.5px; font-weight: 800; color: $green; }
+  p { margin: 0 0 12px; font-size: 13px; line-height: 1.5; color: $muted; }
+}
+
+/* summary */
+.summary { text-align: center; padding: 34px 28px 30px; }
+.result-emoji { font-size: 46px; }
+.summary h2 { margin: 8px 0 4px; font-size: 22px; }
+.result-sub { margin: 0 auto 18px; font-size: 13.5px; color: $muted; max-width: 400px; line-height: 1.5; b { color: $text; } }
+
+.mastery-move {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 22px;
+  background: $surface-2;
+  border-radius: 14px;
+  margin-bottom: 22px;
+
+  .from { font-size: 20px; font-weight: 800; color: $faint; }
+  .arrow { color: $faint; }
+  .to { font-size: 24px; font-weight: 800; color: $accent; &.full { color: $green; } }
+}
+
+.btn.wide { width: 100%; padding: 12px; }
+
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pop { from { opacity: 0; transform: translateY(14px) scale(0.98); } to { opacity: 1; transform: none; } }

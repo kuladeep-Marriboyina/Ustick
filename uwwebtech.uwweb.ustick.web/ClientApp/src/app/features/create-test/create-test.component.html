@@ -1,0 +1,61 @@
+<section class="create-test">
+  <!-- Question Mode card -->
+  <div class="ct-card">
+    <div class="ct-card-head">
+      <span class="ct-head-title">Question Mode <span class="info">ⓘ</span></span>
+      <span class="chevron">⌃</span>
+    </div>
+
+    <div class="pill-toggle">
+      <button [class.active]="mode === 'standard'" (click)="mode = 'standard'">Standard</button>
+      <button [class.active]="mode === 'custom'" (click)="mode = 'custom'">Custom</button>
+    </div>
+
+    <div class="mode-row">
+      <label class="mode-check" *ngFor="let m of modes">
+        <input type="checkbox" [(ngModel)]="m.selected" />
+        <span class="mode-label">{{ m.label }}</span>
+        <span class="count-badge">{{ m.count }}</span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Subjects card -->
+  <div class="ct-card">
+    <div class="ct-card-head">
+      <span class="ct-head-title">
+        <input type="checkbox" class="all-check" /> Subjects and Chapters
+      </span>
+      <span class="expand">+ Expand All <span class="chevron">⌃</span></span>
+    </div>
+
+    <div class="subject-grid">
+      <label class="subject-row" *ngFor="let s of subjects" (click)="toggleSubject(s)">
+        <input type="checkbox" [checked]="s.selected" (click)="$event.preventDefault()" />
+        <span class="subject-name">{{ s.name }}</span>
+        <span class="count-badge">{{ s.count }}</span>
+        <span class="plus">+</span>
+      </label>
+    </div>
+  </div>
+
+  <!-- No. of Questions card -->
+  <div class="ct-card">
+    <div class="ct-card-head">
+      <span class="ct-head-title">No. of Questions</span>
+      <span class="chevron">⌃</span>
+    </div>
+    <div class="qcount-row">
+      <input type="number" min="0" [(ngModel)]="questionCount" class="qcount-input" />
+      <span class="qcount-hint">Max allowed per block <span class="count-badge grey">0</span></span>
+    </div>
+  </div>
+
+  <!-- sticky footer -->
+  <div class="ct-footer">
+    <button class="btn btn-primary generate" [disabled]="!canGenerate">GENERATE TEST</button>
+    <span class="info">ⓘ</span>
+  </div>
+
+  <p class="copyright">Copyright © UWorld. All rights reserved.</p>
+</section>

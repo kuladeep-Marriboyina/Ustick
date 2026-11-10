@@ -1,0 +1,129 @@
+@import 'assets/css/colors';
+
+.create-test { max-width: 1040px; margin: 0 auto; }
+
+.ct-card {
+  background: #fff;
+  border: 1px solid $border-grey;
+  border-radius: 6px;
+  margin-bottom: 14px;
+  padding: 18px 22px;
+}
+
+.ct-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+
+  .ct-head-title {
+    font-size: 16px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .info { color: $uworld-blue; font-size: 13px; }
+  .expand { color: $uworld-blue; font-size: 13px; font-weight: 600; cursor: pointer; }
+  .chevron { color: $muted-grey; }
+  .all-check { width: 16px; height: 16px; accent-color: $uworld-blue; }
+}
+
+/* Standard / Custom pill */
+.pill-toggle {
+  display: inline-flex;
+  background: $secondary-bg;
+  border-radius: 20px;
+  padding: 3px;
+  margin-bottom: 18px;
+
+  button {
+    border: none;
+    background: transparent;
+    padding: 7px 22px;
+    border-radius: 18px;
+    font-family: $font-stack;
+    font-size: 14px;
+    color: $muted-grey;
+    cursor: pointer;
+
+    &.active { background: #fff; color: $primary-text; font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,0.12); }
+  }
+}
+
+.mode-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 26px;
+}
+
+.mode-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+
+  input { width: 17px; height: 17px; accent-color: $uworld-blue; }
+  .mode-label { font-size: 14px; }
+}
+
+.subject-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 48px;
+}
+
+.subject-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+
+  input { width: 16px; height: 16px; accent-color: $uworld-blue; }
+  .subject-name { font-size: 14px; color: $uworld-blue; flex: 0 0 auto; }
+  .plus { margin-left: auto; color: $muted-grey; font-size: 18px; }
+}
+
+.qcount-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  .qcount-input {
+    width: 60px;
+    padding: 8px;
+    border: 1px solid $border-grey;
+    border-radius: 4px;
+    font-size: 14px;
+    text-align: center;
+  }
+  .qcount-hint { font-size: 14px; color: $muted-grey; display: flex; align-items: center; gap: 8px; }
+}
+
+.count-badge.grey { border-color: $border-grey; color: $muted-grey; background: $secondary-bg; }
+
+.ct-footer {
+  position: sticky;
+  bottom: 0;
+  background: $secondary-bg;
+  border: 1px solid $border-grey;
+  border-radius: 6px;
+  padding: 16px 22px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+
+  .info { color: $uworld-blue; }
+}
+
+.copyright {
+  text-align: center;
+  font-size: 12px;
+  color: $muted-grey;
+  margin: 18px 0 0;
+}
+
+@media (max-width: 760px) {
+  .subject-grid { grid-template-columns: 1fr; }
+}

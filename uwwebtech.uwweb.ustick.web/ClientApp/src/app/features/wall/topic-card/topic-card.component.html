@@ -1,0 +1,32 @@
+<div class="card" [class.mastered]="isMastered" [class.locked]="!due && !isMastered">
+  <div class="card-head">
+    <span class="subject">{{ note.subjectName }}</span>
+
+    <div class="ring" [style.--c]="meta.color">
+      <svg viewBox="0 0 40 40" width="40" height="40">
+        <circle class="ring-track" cx="20" cy="20" [attr.r]="ringRadius"></circle>
+        <circle class="ring-value" cx="20" cy="20" [attr.r]="ringRadius"
+                [attr.stroke-dasharray]="circumference"
+                [attr.stroke-dashoffset]="dashOffset"></circle>
+      </svg>
+      <span class="ring-num" *ngIf="!isMastered">{{ note.mastery }}</span>
+      <span class="ring-num check" *ngIf="isMastered">✓</span>
+    </div>
+  </div>
+
+  <h3 class="topic">{{ note.topicName }}</h3>
+  <p class="takeaway">{{ note.customNote || note.takeaway }}</p>
+
+  <div class="streak" *ngIf="!isMastered && note.strongStreak > 0">
+    <span class="dot" *ngFor="let d of [0,1,2,3]" [class.on]="d < note.strongStreak"></span>
+    <span class="streak-label">{{ note.strongStreak }} strong</span>
+  </div>
+
+  <div class="card-foot">
+    <span class="chip" [style.--c]="meta.color" [style.--soft]="meta.soft">{{ meta.label }}</span>
+
+    <button *ngIf="!isMastered && due" class="btn btn-primary retest-btn" (click)="onRetest()">Retest</button>
+    <span *ngIf="!isMastered && !due" class="locked-chip">🔒 {{ daysLeft }}d</span>
+    <span *ngIf="isMastered" class="mastered-tag">Mastered</span>
+  </div>
+</div>

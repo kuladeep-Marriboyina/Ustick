@@ -1,0 +1,72 @@
+@import 'assets/css/colors';
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: $font;
+  color: $text;
+  background: $bg;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.011em;
+}
+
+* { box-sizing: border-box; }
+
+h1, h2, h3, h4 { margin: 0; font-weight: 650; color: $ink; letter-spacing: -0.022em; }
+
+a { color: $accent; text-decoration: none; &:hover { text-decoration: underline; } }
+
+::selection { background: rgba($accent, 0.16); }
+
+button { font-family: $font; }
+
+/* buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 13.5px;
+  padding: 9px 16px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.08s ease, box-shadow 0.15s ease;
+  &:active { transform: translateY(0.5px); }
+}
+.btn-primary {
+  background: $accent;
+  color: #fff;
+  box-shadow: 0 1px 2px rgba($accent, 0.4);
+  &:hover { background: $accent-dark; }
+  &:disabled { background: $surface-2; color: $faint; box-shadow: none; cursor: not-allowed; }
+}
+.btn-ghost {
+  background: $surface;
+  color: $text;
+  border-color: $line-strong;
+  &:hover { background: $surface-2; }
+}
+
+.count-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  height: 20px;
+  padding: 0 7px;
+  border-radius: 10px;
+  border: 1px solid $line-strong;
+  color: $accent;
+  font-size: 12px;
+  font-weight: 600;
+  background: $accent-soft;
+}
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

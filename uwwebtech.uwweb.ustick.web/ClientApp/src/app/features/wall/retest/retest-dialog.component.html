@@ -1,0 +1,85 @@
+<div class="overlay" (click)="mode === 'summary' ? finish() : null">
+  <div class="dialog" (click)="$event.stopPropagation()">
+
+    <!-- header: live mastery ring + topic -->
+    <div class="dialog-head">
+      <div class="head-info">
+        <span class="subject">{{ note.subjectName }}</span>
+        <h3>{{ note.topicName }}</h3>
+      </div>
+      <div class="head-ring">
+        <div class="ring big" [class.full]="mastered">
+          <svg viewBox="0 0 48 48" width="48" height="48">
+            <circle class="t" cx="24" cy="24" r="20"></circle>
+            <circle class="v" cx="24" cy="24" r="20"
+                    [attr.stroke-dasharray]="circumference"
+                    [attr.stroke-dashoffset]="dashOffset"></circle>
+          </svg>
+          <span class="ring-pct">{{ liveMastery }}%</span>
+        </div>
+        <span class="ring-cap">mastery</span>
+      </div>
+    </div>
+
+    <div class="progress-line" *ngIf="mode === 'question' || mode === 'feedback'">
+      <span>Same-concept retest</span>
+      <span>Question {{ index + 1 }} of {{ questions.length }}</span>
+    </div>
+
+    <!-- loading -->
+    <div class="body center" *ngIf="mode === 'loading'">Loading questions…</div>
+
+    <!-- question / feedback -->
+    <div class="body" *ngIf="mode === 'question' || mode === 'feedback'">
+      <p class="stem">{{ current.stem }}</p>
+
+      <button *ngFor="let opt of current.options"
+              class="option {{ optionClass(opt.key) }}"
+              [disabled]="mode === 'feedback'"
+              (click)="select(opt.key)">
+        <span class="opt-key">{{ opt.key }}</span>
+        <span class="opt-text">{{ opt.text }}</span>
+        <span class="opt-mark" *ngIf="mode === 'feedback' && opt.key === current.correctKey">✓</span>
+        <span class="opt-mark wrong" *ngIf="mode === 'feedback' && opt.key === selectedKey && opt.key !== current.correctKey">✕</span>
+      </button>
+
+      <div class="feedback" *ngIf="mode === 'feedback'" [class.good]="lastCorrect">
+        <div class="fb-top">
+          <span class="fb-title">{{ lastCorrect ? 'Correct' : 'Not quite' }}</span>
+          <span class="fb-points" *ngIf="lastCorrect">+{{ perCorrect }} mastery</span>
+        </div>
+        <p>{{ current.rationale }}</p>
+        <button class="btn btn-primary" (click)="next()">
+          {{ index < questions.length - 1 ? 'Next question' : 'See result' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- summary -->
+    <div class="body summary" *ngIf="mode === 'summary'">
+      <div class="result-emoji">{{ mastered ? '🎓' : '📈' }}</div>
+      <h2>{{ mastered ? 'Topic mastered!' : 'Nice progress' }}</h2>
+      <p class="result-sub" *ngIf="mastered">
+        You earned it over time — <b>{{ note.topicName }}</b> graduated to your Mastered list.
+      </p>
+      <p class="result-sub" *ngIf="!mastered && strong">
+        {{ correctCount }} / {{ questions.length }} correct — strong pass. It locks now and
+        resurfaces in <b>{{ nextCooldownDays }} day{{ nextCooldownDays === 1 ? '' : 's' }}</b>.
+        Spacing your retests is what makes it stick.
+      </p>
+      <p class="result-sub" *ngIf="!mastered && !strong">
+        {{ correctCount }} / {{ questions.length }} correct. Still shaky — mastery slipped and it
+        comes back in <b>{{ nextCooldownDays }} day{{ nextCooldownDays === 1 ? '' : 's' }}</b>.
+      </p>
+
+      <div class="mastery-move">
+        <span class="from">{{ startMastery }}%</span>
+        <span class="arrow">→</span>
+        <span class="to" [class.full]="mastered">{{ liveMastery }}%</span>
+      </div>
+
+      <button class="btn btn-primary wide" (click)="finish()">Done</button>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,18 @@
+# Angular / Node
+**/node_modules/
+**/dist/
+**/.angular/
+*.log
+npm-debug.log*
+
+# .NET
+**/bin/
+**/obj/
+
+# IDE / OS
+.vs/
+.idea/
+.vscode/
+*.user
+Thumbs.db
+.DS_Store

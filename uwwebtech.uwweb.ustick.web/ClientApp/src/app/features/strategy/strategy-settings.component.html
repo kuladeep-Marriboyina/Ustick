@@ -1,0 +1,63 @@
+<div class="overlay" (click)="closed.emit()">
+  <div class="panel" (click)="$event.stopPropagation()">
+    <div class="panel-head">
+      <div>
+        <h3>Your study strategy</h3>
+        <p>How often topics come back for retest. Spacing is what moves them into long-term memory.</p>
+      </div>
+      <button class="x" (click)="closed.emit()">✕</button>
+    </div>
+
+    <div class="presets">
+      <button *ngFor="let p of strategy.presets"
+              class="preset"
+              [class.sel]="isSelected(p)"
+              (click)="selectPreset(p)">
+        <div class="preset-top">
+          <span class="preset-name">{{ p.name }}</span>
+          <span class="preset-badge" *ngIf="p.id === 'proven'">Recommended</span>
+        </div>
+        <p class="preset-desc">{{ p.description }}</p>
+        <div class="preset-meta">Intervals {{ p.strongIntervals.join(' · ') }} days</div>
+      </button>
+    </div>
+
+    <div class="custom">
+      <div class="custom-head">Fine-tune <span *ngIf="isCustom" class="custom-tag">Custom</span></div>
+
+      <div class="field">
+        <label>Spaced intervals (days between retests)</label>
+        <input type="text" [value]="intervalsText"
+               (input)="onIntervals($any($event.target).value)" placeholder="2, 4, 7, 14" />
+        <span class="hint">Grows after each strong pass — expanding recall is best for memory.</span>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>Strong pass needs</label>
+          <div class="stepper">
+            <input type="number" min="40" max="100" step="5"
+                   [(ngModel)]="thresholdPct" (ngModelChange)="onThreshold()" />
+            <span class="unit">% correct</span>
+          </div>
+          <span class="hint">% correct in a retest to count as a strong pass.</span>
+        </div>
+
+        <div class="field">
+          <label>Max gain / retest</label>
+          <div class="stepper">
+            <input type="number" min="8" max="40" step="2"
+                   [(ngModel)]="working.gainCap" (ngModelChange)="markCustom()" />
+            <span class="unit">points</span>
+          </div>
+          <span class="hint">Caps how fast mastery can rise — forces several sessions.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-foot">
+      <button class="btn btn-ghost" (click)="closed.emit()">Cancel</button>
+      <button class="btn btn-primary" (click)="apply()">Apply strategy</button>
+    </div>
+  </div>
+</div>

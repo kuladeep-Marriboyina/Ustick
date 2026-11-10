@@ -1,0 +1,43 @@
+<div class="shell" [class.collapsed]="collapsed">
+  <!-- Top bar -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="hamburger" (click)="toggle()" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+      <span class="brand">
+        <span class="brand-mark">US</span>
+        <span class="brand-name">UStick</span>
+      </span>
+      <span class="tagline">Stick it · Fix it · Peel it</span>
+    </div>
+    <div class="topbar-right">
+      <span class="streak-chip">🔥 5-day streak</span>
+      <span class="product">{{ user.product }}</span>
+      <span class="avatar" [title]="user.name">{{ user.initials }}</span>
+    </div>
+  </header>
+
+  <!-- Left sidebar -->
+  <nav class="sidebar">
+    <a *ngFor="let item of navItems"
+       class="nav-item"
+       [routerLink]="item.route"
+       routerLinkActive="active">
+      <span class="nav-icon">{{ item.icon }}</span>
+      <span class="nav-label">{{ item.label }}</span>
+    </a>
+
+    <div class="sidebar-foot">
+      <div class="powered">
+        <span class="by">powered by</span>
+        <span class="uw">UWorld</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main content -->
+  <main class="content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

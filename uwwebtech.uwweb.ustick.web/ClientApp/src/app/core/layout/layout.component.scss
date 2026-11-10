@@ -1,0 +1,93 @@
+@import 'assets/css/colors';
+
+$topbar-h: 60px;
+$sidebar-w: 224px;
+$sidebar-w-collapsed: 72px;
+
+.shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: $sidebar-w 1fr;
+  grid-template-rows: $topbar-h 1fr;
+  grid-template-areas: 'topbar topbar' 'sidebar content';
+  transition: grid-template-columns 0.2s ease;
+
+  &.collapsed {
+    grid-template-columns: $sidebar-w-collapsed 1fr;
+    .nav-label, .tagline, .sidebar-foot { opacity: 0; pointer-events: none; }
+  }
+}
+
+.topbar {
+  grid-area: topbar;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: saturate(180%) blur(14px);
+  border-bottom: 1px solid $line;
+  padding: 0 22px;
+  position: sticky; top: 0; z-index: 20;
+}
+
+.topbar-left { display: flex; align-items: center; gap: 15px; }
+
+.hamburger {
+  border: none; background: transparent; width: 22px; height: 18px;
+  display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; padding: 2px 0;
+  span { display: block; height: 1.5px; width: 100%; background: $muted; border-radius: 2px; transition: 0.2s; }
+  &:hover span { background: $accent; }
+}
+
+.brand { display: flex; align-items: center; gap: 10px;
+  .brand-mark {
+    width: 30px; height: 30px; border-radius: 8px; background: $accent; color: #fff;
+    font-weight: 700; font-size: 12.5px; display: flex; align-items: center; justify-content: center;
+  }
+  .brand-name { font-size: 18px; font-weight: 700; color: $ink; letter-spacing: -0.03em; }
+}
+
+.tagline { font-size: 12.5px; color: $faint; font-weight: 500; transition: opacity 0.2s; }
+
+.topbar-right { display: flex; align-items: center; gap: 14px; }
+
+.streak-chip {
+  font-size: 12.5px; font-weight: 600; color: $amber;
+  background: rgba($amber, 0.1); padding: 5px 11px; border-radius: 18px;
+}
+.product { font-size: 13px; color: $muted; font-weight: 500; }
+.avatar {
+  width: 34px; height: 34px; border-radius: 50%; background: $surface-2; border: 1px solid $line-strong;
+  color: $text; font-size: 12.5px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+}
+
+.sidebar {
+  grid-area: sidebar;
+  background: $surface;
+  border-right: 1px solid $line;
+  padding: 14px 12px;
+  display: flex; flex-direction: column; gap: 2px;
+}
+
+.nav-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 12px; border-radius: 9px;
+  color: $muted; font-size: 14px; font-weight: 550; cursor: pointer; white-space: nowrap;
+  transition: background 0.14s ease, color 0.14s ease;
+
+  &:hover { background: $surface-2; color: $text; text-decoration: none; }
+  &.active { background: $accent-soft; color: $accent; font-weight: 650; }
+
+  .nav-icon { font-size: 16px; width: 20px; text-align: center; opacity: 0.9; }
+  .nav-label { transition: opacity 0.2s; }
+}
+
+.sidebar-foot {
+  margin-top: auto; padding: 10px 12px; transition: opacity 0.2s;
+  .powered { display: flex; flex-direction: column; line-height: 1.2;
+    .by { font-size: 10px; color: $faint; text-transform: uppercase; letter-spacing: 0.08em; }
+    .uw { font-size: 14px; font-weight: 700; color: $ink; }
+  }
+}
+
+.content { grid-area: content; padding: 28px 34px; overflow-y: auto; }

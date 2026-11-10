@@ -1,0 +1,61 @@
+// =============================================================
+// UStick — Minimal Light design tokens (Linear / Vercel aesthetic)
+// White surfaces, airy spacing, one confident accent, neutral grays.
+// =============================================================
+
+// Single accent
+$accent:         #2F6BED;
+$accent-dark:    #1E52C8;
+$accent-soft:    #EAF1FE;
+
+// Ink & neutrals
+$ink:            #0F1115;
+$text:           #1F2430;
+$muted:          #697086;
+$faint:          #9AA1AE;
+$line:           #ECEDF1;
+$line-strong:    #E1E3E9;
+
+// Surfaces
+$bg:             #FBFBFD;
+$surface:        #FFFFFF;
+$surface-2:      #F6F7F9;
+
+// Stage colors (mastery stages)
+$stage-weak:     #E5484D; // Weak
+$stage-improve:  #E8910C; // Improving
+$stage-almost:   #2F6BED; // Almost there (accent)
+$stage-master:   #12B76A; // Mastered
+
+$stage-weak-soft:    #FDECEC;
+$stage-improve-soft: #FDF3E4;
+$stage-almost-soft:  #EAF1FE;
+$stage-master-soft:  #E6F7EF;
+
+// Status
+$green:          #12B76A;
+$red:            #E5484D;
+$amber:          #E8910C;
+
+// Shadows — minimal, soft
+$shadow-xs: 0 1px 2px rgba(16, 18, 24, 0.05);
+$shadow-sm: 0 1px 3px rgba(16, 18, 24, 0.06), 0 1px 2px rgba(16, 18, 24, 0.04);
+$shadow-md: 0 6px 16px rgba(16, 18, 24, 0.08);
+$shadow-lg: 0 16px 40px rgba(16, 18, 24, 0.12);
+
+$radius-sm: 10px;
+$radius:    14px;
+$radius-lg: 18px;
+
+$font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+// --- legacy aliases so older partials keep compiling ---
+$primary-text:      $text;
+$muted-grey:        $muted;
+$border-grey:       $line;
+$uworld-blue:       $accent;
+$uworld-blue-dark:  $accent-dark;
+$uworld-blue-light: $accent-soft;
+$page-bg:           $bg;
+$secondary-bg:      $surface-2;
+$font-stack:        $font;
