@@ -1,38 +1,32 @@
 <section class="wall-page">
-  <!-- hero -->
-  <div class="hero">
-    <div class="hero-text">
+  <!-- compact top bar -->
+  <div class="tw-top" *ngIf="wall">
+    <div class="tw-left">
       <h1>The Wall</h1>
-      <p>Every weak topic is stuck here. Retest it well over spaced days — at 100% it peels off into Mastered.</p>
-    </div>
-
-    <div class="hero-controls" *ngIf="wall">
-      <button class="strategy-chip" (click)="showStrategy = true" title="Change your study strategy">
-        <span class="sc-dot"></span>
-        <span class="sc-text"><span class="sc-label">Strategy</span>{{ strategy.current.name }}</span>
-        <span class="sc-gear">⚙</span>
-      </button>
-      <div class="clock">
-        <span class="clock-date">{{ now | date:'EEE, MMM d' }}</span>
-        <button class="btn btn-ghost sim" (click)="simulateDay()">⏩ Simulate day</button>
+      <div class="tabs">
+        <button class="tab" [class.active]="activeTab === 'wall'" (click)="activeTab = 'wall'">
+          Wall <span class="tab-count">{{ wall.stuckCount }}</span>
+        </button>
+        <button class="tab" [class.active]="activeTab === 'fame'" (click)="activeTab = 'fame'">
+          Mastered <span class="tab-count">{{ wall.peeledCount }}</span>
+        </button>
       </div>
     </div>
-  </div>
 
-  <div class="stat-row" *ngIf="wall">
-    <div class="stat-card"><span class="stat-num">{{ dueCount }}</span><span class="stat-label">Due now</span></div>
-    <div class="stat-card"><span class="stat-num">{{ wall.stuckCount }}</span><span class="stat-label">On the wall</span></div>
-    <div class="stat-card good"><span class="stat-num">{{ wall.peeledCount }}</span><span class="stat-label">Mastered</span></div>
-  </div>
-
-  <!-- tabs -->
-  <div class="tabs" *ngIf="wall">
-    <button class="tab" [class.active]="activeTab === 'wall'" (click)="activeTab = 'wall'">
-      The Wall <span class="tab-count">{{ wall.stuckCount }}</span>
-    </button>
-    <button class="tab" [class.active]="activeTab === 'fame'" (click)="activeTab = 'fame'">
-      Mastered <span class="tab-count">{{ wall.peeledCount }}</span>
-    </button>
+    <div class="tw-right">
+      <div class="mini-stats">
+        <span class="ms"><b>{{ dueCount }}</b> due</span>
+        <span class="ms"><b>{{ wall.stuckCount }}</b> on wall</span>
+        <span class="ms good"><b>{{ wall.peeledCount }}</b> mastered</span>
+      </div>
+      <button class="strategy-chip" (click)="showStrategy = true" title="Change your study strategy">
+        <span class="sc-dot"></span>
+        <span class="sc-text">{{ strategy.current.name }}</span>
+        <span class="sc-gear">⚙</span>
+      </button>
+      <span class="clock-date">{{ now | date:'MMM d' }}</span>
+      <button class="btn btn-ghost sim" (click)="simulateDay()">⏩ Day</button>
+    </div>
   </div>
 
   <div class="loading" *ngIf="loading">Loading your wall…</div>
