@@ -172,11 +172,16 @@
 .big-retest {
   padding: 11px 22px;
   font-size: 14px;
-  border-radius: 12px;
-  background: var(--grad);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+  font-weight: 650;
+  border-radius: 11px;
+  background: var(--c);
+  color: #fff;
+  box-shadow: 0 2px 5px rgba(16, 18, 24, 0.12);
+  transition: filter 0.15s ease, box-shadow 0.15s ease, transform 0.08s ease;
   .arrow { transition: transform 0.18s ease; display: inline-block; }
+  &:hover { filter: brightness(0.93); box-shadow: 0 4px 10px rgba(16, 18, 24, 0.16); }
   &:hover .arrow { transform: translateX(3px); }
+  &:active { transform: translateY(0.5px); }
 }
 
 .locked-chip {
