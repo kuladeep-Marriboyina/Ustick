@@ -2,134 +2,214 @@
 
 :host { display: block; }
 
-.card {
+.bc-wrap {
+  position: relative;
+  perspective: 1600px;
+  &.weak    { --c: #{$stage-weak};    --grad: #{$grad-weak};    --soft: #{$stage-weak-soft}; }
+  &.improve { --c: #{$stage-improve}; --grad: #{$grad-improve}; --soft: #{$stage-improve-soft}; }
+  &.almost  { --c: #{$stage-almost};  --grad: #{$grad-almost};  --soft: #{$stage-almost-soft}; }
+  &.master  { --c: #{$stage-master};  --grad: #{$grad-master};  --soft: #{$stage-master-soft}; }
+  --curl: 16px;
+  animation: bc-in 0.4s ease both;
+}
+
+/* dashed outline revealed on the wall when a card peels away */
+.wall-ghost {
+  position: absolute;
+  inset: 0;
+  border: 2px dashed rgba($muted, 0.3);
+  border-radius: $radius-xl;
+  opacity: 0;
+  transition: opacity 0.35s ease 0.45s;
+}
+.bc-wrap.peeling .wall-ghost { opacity: 1; }
+
+.bigcard {
+  position: relative;
   background: $surface;
   border: 1px solid $line;
-  border-radius: $radius;
-  padding: 16px 16px 14px;
-  margin-bottom: 14px;
-  box-shadow: $shadow-xs;
-  transition: box-shadow 0.18s ease, transform 0.18s ease, border-color 0.18s ease;
+  border-radius: $radius-xl;
+  padding: 24px 24px 22px;
+  min-height: 236px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: $shadow-sm;
+  overflow: hidden;
+  transform-origin: 16% 88%;
+  transition: transform 0.28s cubic-bezier(0.34, 1.4, 0.5, 1), box-shadow 0.28s ease, border-color 0.2s ease;
+  will-change: transform;
+}
 
-  &:hover {
-    box-shadow: $shadow-md;
-    transform: translateY(-2px);
+.bigcard::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 5px;
+  background: var(--grad);
+}
+
+/* folded, liftable corner (top-right) */
+.peel {
+  position: absolute;
+  top: 0; right: 0;
+  width: var(--curl);
+  height: var(--curl);
+  background: linear-gradient(225deg, #ffffff 0 46%, rgba(0,0,0,0.06) 47%, transparent 48%);
+  border-top-right-radius: $radius-xl;
+  box-shadow: -3px 3px 7px rgba(16, 18, 24, 0.12);
+  transition: width 0.25s ease, height 0.25s ease, box-shadow 0.25s ease;
+  z-index: 3;
+}
+.peel-shadow {
+  position: absolute;
+  top: 0; right: 0;
+  width: var(--curl);
+  height: var(--curl);
+  background: radial-gradient(circle at 100% 0, rgba(0,0,0,0.1), transparent 70%);
+  transition: all 0.25s ease;
+  z-index: 2;
+}
+
+/* hover: lift + corner curls up */
+.bc-wrap:not(.peeling):not(.locked):hover {
+  --curl: 30px;
+  .bigcard {
+    transform: translateY(-6px);
+    box-shadow: $shadow-lg;
     border-color: $line-strong;
   }
-  &.mastered { background: linear-gradient(180deg, #fff, #f6fdf9); border-color: #D5F0E2; }
-  &.locked { background: $surface-2; }
-  &.locked:hover { transform: none; box-shadow: $shadow-xs; }
 }
 
-.streak {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  margin: 10px 0 0;
-
-  .dot {
-    width: 7px; height: 7px; border-radius: 50%;
-    background: $line-strong;
-    &.on { background: $green; }
-  }
-  .streak-label { font-size: 11px; font-weight: 600; color: $muted; margin-left: 4px; }
-}
-
-.locked-chip {
-  font-size: 12px;
-  font-weight: 650;
-  color: $muted;
-  background: $surface;
-  border: 1px solid $line-strong;
-  padding: 6px 12px;
-  border-radius: 20px;
-}
-
-.card-head {
+.bc-top {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 10px;
+  gap: 14px;
+}
+
+.bc-eyebrow {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
 
   .subject {
-    font-size: 10.5px;
+    font-size: 11px;
     font-weight: 700;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.07em;
     text-transform: uppercase;
     color: $faint;
-    padding-top: 4px;
+  }
+  .chip {
+    align-self: flex-start;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--c);
+    background: var(--soft);
+    padding: 4px 11px;
+    border-radius: 20px;
   }
 }
 
-/* mastery ring */
-.ring {
+/* big mastery arc */
+.arc {
   position: relative;
-  width: 40px;
-  height: 40px;
+  width: 64px;
+  height: 64px;
   flex: 0 0 auto;
 
   svg { transform: rotate(-90deg); display: block; }
-  .ring-track { fill: none; stroke: $line; stroke-width: 4; }
-  .ring-value {
+  .arc-track { fill: none; stroke: $line; stroke-width: 6; }
+  .arc-value {
     fill: none;
     stroke: var(--c);
-    stroke-width: 4;
+    stroke-width: 6;
     stroke-linecap: round;
-    transition: stroke-dashoffset 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: stroke-dashoffset 0.8s cubic-bezier(0.34, 1.2, 0.5, 1);
   }
-  .ring-num {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 11.5px;
-    font-weight: 700;
-    color: $text;
+  .arc-num {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 800; color: $ink;
+    i { font-size: 10px; font-weight: 700; color: $muted; margin-left: 1px; font-style: normal; }
   }
-  .ring-num.check { color: $green; font-size: 15px; }
+  .arc-num.check { color: $green; font-size: 24px; }
 }
 
-.topic {
-  margin: 12px 0 6px;
-  font-size: 15.5px;
-  font-weight: 650;
+.bc-title {
+  margin: 16px 0 8px;
+  font-size: 22px;
+  font-weight: 750;
+  letter-spacing: -0.02em;
   color: $ink;
-  line-height: 1.25;
+  line-height: 1.18;
 }
 
-.takeaway {
+.bc-take {
   margin: 0;
-  font-size: 12.5px;
-  line-height: 1.45;
+  font-size: 14px;
+  line-height: 1.5;
   color: $muted;
-  min-height: 36px;
+  flex: 1;
 }
 
-.card-foot {
+.bc-streak {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+  gap: 6px;
   margin-top: 14px;
+  .pip { width: 8px; height: 8px; border-radius: 50%; background: $line-strong;
+    &.on { background: var(--c); } }
+  .pip-label { font-size: 11.5px; font-weight: 600; color: $muted; margin-left: 5px; }
 }
 
-.chip {
-  font-size: 11.5px;
+.bc-foot {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 18px;
+}
+
+.big-retest {
+  padding: 11px 22px;
+  font-size: 14px;
+  border-radius: 12px;
+  background: var(--grad);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+  .arrow { transition: transform 0.18s ease; display: inline-block; }
+  &:hover .arrow { transform: translateX(3px); }
+}
+
+.locked-chip {
+  font-size: 12.5px;
   font-weight: 650;
-  color: var(--c);
-  background: var(--soft);
-  padding: 4px 10px;
+  color: $muted;
+  background: $surface-2;
+  border: 1px solid $line-strong;
+  padding: 9px 15px;
   border-radius: 20px;
 }
 
-.retest-btn { padding: 7px 16px; }
+.mastered-badge { font-size: 13.5px; font-weight: 750; color: $green; }
 
-.mastered-tag {
-  font-size: 12px;
-  font-weight: 700;
-  color: $green;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
+.bc-wrap.locked .bigcard { background: $surface-2; }
+.bc-wrap.is-mastered .bigcard {
+  background: linear-gradient(180deg, #ffffff, #f4fdf8);
+  border-color: #CBEFDC;
 }
+
+/* ---- the peel-off ---- */
+.bc-wrap.peeling {
+  z-index: 30;
+  --curl: 66px;
+  .peel { box-shadow: -8px 8px 16px rgba(16,18,24,0.22); }
+  .bigcard { animation: bc-peel 1.05s cubic-bezier(0.5, 0.04, 0.3, 1) forwards; }
+}
+
+@keyframes bc-peel {
+  0%   { transform: none; opacity: 1; }
+  16%  { transform: perspective(1500px) rotate3d(1, -1, 0, 12deg) translateY(-12px); box-shadow: $shadow-lg; }
+  55%  { transform: perspective(1500px) rotate3d(1, -1, 0, 44deg) translate(-14px, -58px) scale(0.94); opacity: 1; }
+  100% { transform: perspective(1500px) rotate3d(1, -1, 0, 78deg) translate(-34px, -140px) scale(0.78); opacity: 0; }
+}
+
+@keyframes bc-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }

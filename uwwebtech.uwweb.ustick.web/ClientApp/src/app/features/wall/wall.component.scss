@@ -1,6 +1,6 @@
 @import 'assets/css/colors';
 
-.wall-page { max-width: 1240px; margin: 0 auto; }
+.wall-page { max-width: 1340px; margin: 0 auto; }
 
 /* hero */
 .hero {
@@ -98,56 +98,38 @@
 
 .loading { padding: 50px; text-align: center; color: $muted; }
 
-/* columns */
-.columns {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  align-items: start;
-  animation: rise-in 0.3s ease both;
-}
-
-.column {
-  background: $surface-2;
+/* the wall board — big cards on a subtle wall backdrop */
+.board {
+  position: relative;
+  border-radius: $radius-xl;
+  padding: 26px;
   border: 1px solid $line;
-  border-radius: $radius-lg;
-  display: flex;
-  flex-direction: column;
-  min-height: 220px;
+  background:
+    radial-gradient($wall-dot 1px, transparent 1.6px) 0 0 / 22px 22px,
+    linear-gradient(180deg, #F3F5F9, $wall-bg);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), $shadow-xs;
+  animation: rise-in 0.3s ease both;
+  overflow: hidden;
 }
 
-.column-head {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  padding: 14px 16px 12px;
-
-  .column-title { font-size: 13.5px; font-weight: 750; color: $ink; }
-  .column-count {
-    min-width: 22px; height: 20px; padding: 0 7px; border-radius: 10px;
-    background: $surface; border: 1px solid $line-strong;
-    font-size: 11.5px; font-weight: 700; color: $muted;
-    display: inline-flex; align-items: center; justify-content: center;
-  }
+.mastered-board {
+  background:
+    radial-gradient(rgba(18, 183, 106, 0.07) 1px, transparent 1.6px) 0 0 / 22px 22px,
+    linear-gradient(180deg, #F1FAF5, #E9F6EF);
 }
 
-.column[data-state='0'] .column-title { color: $stage-weak; }
-.column[data-state='1'] .column-title { color: $stage-improve; }
-.column[data-state='2'] .column-title { color: $stage-almost; }
-
-.column-body { padding: 4px 12px 2px; flex: 1; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(344px, 1fr));
+  gap: 22px;
+}
 
 .empty {
-  text-align: center; font-size: 12.5px; color: $faint; padding: 26px 10px; font-style: italic;
-  &.wide { grid-column: 1 / -1; padding: 60px; }
-}
-
-/* mastered grid */
-.fame-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 16px;
-  animation: rise-in 0.3s ease both;
+  text-align: center;
+  font-size: 14.5px;
+  color: $muted;
+  padding: 64px 20px;
+  font-weight: 550;
 }
 
 /* toast */
@@ -172,4 +154,7 @@
   to   { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
-@media (max-width: 1000px) { .columns { grid-template-columns: 1fr; } }
+@media (max-width: 760px) {
+  .grid { grid-template-columns: 1fr; }
+  .board { padding: 16px; }
+}

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
 import { StrategyConfig } from '../../core/models/sticky-note.model';
 import { StrategyService } from '../../services/strategy.service';
 
@@ -9,6 +9,11 @@ import { StrategyService } from '../../services/strategy.service';
 })
 export class StrategySettingsComponent implements OnInit {
   @Output() closed = new EventEmitter<void>();
+
+  @HostListener('document:keydown.escape')
+  onEscape(): void {
+    this.closed.emit();
+  }
 
   working!: StrategyConfig;
   intervalsText = '';

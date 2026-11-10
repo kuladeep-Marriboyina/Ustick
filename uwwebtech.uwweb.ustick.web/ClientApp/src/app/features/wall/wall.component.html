@@ -3,7 +3,7 @@
   <div class="hero">
     <div class="hero-text">
       <h1>The Wall</h1>
-      <p>Retest a weak topic to earn mastery. Spaced over days, it climbs — at 100% it graduates.</p>
+      <p>Every weak topic is stuck here. Retest it well over spaced days — at 100% it peels off into Mastered.</p>
     </div>
 
     <div class="hero-controls" *ngIf="wall">
@@ -12,7 +12,6 @@
         <span class="sc-text"><span class="sc-label">Strategy</span>{{ strategy.current.name }}</span>
         <span class="sc-gear">⚙</span>
       </button>
-
       <div class="clock">
         <span class="clock-date">{{ now | date:'EEE, MMM d' }}</span>
         <button class="btn btn-ghost sim" (click)="simulateDay()">⏩ Simulate day</button>
@@ -29,7 +28,7 @@
   <!-- tabs -->
   <div class="tabs" *ngIf="wall">
     <button class="tab" [class.active]="activeTab === 'wall'" (click)="activeTab = 'wall'">
-      My Wall <span class="tab-count">{{ wall.stuckCount }}</span>
+      The Wall <span class="tab-count">{{ wall.stuckCount }}</span>
     </button>
     <button class="tab" [class.active]="activeTab === 'fame'" (click)="activeTab = 'fame'">
       Mastered <span class="tab-count">{{ wall.peeledCount }}</span>
@@ -38,28 +37,27 @@
 
   <div class="loading" *ngIf="loading">Loading your wall…</div>
 
-  <!-- MY WALL -->
-  <div class="columns" *ngIf="wall && activeTab === 'wall'">
-    <div class="column" *ngFor="let col of activeColumns" [attr.data-state]="col.state">
-      <div class="column-head">
-        <span class="column-title">{{ col.title }}</span>
-        <span class="column-count">{{ col.notes.length }}</span>
-      </div>
-      <div class="column-body">
-        <app-topic-card
-          *ngFor="let note of col.notes"
-          [note]="note"
-          [now]="now"
-          (retest)="openRetest($event)"></app-topic-card>
-        <div class="empty" *ngIf="col.notes.length === 0">All clear here.</div>
-      </div>
+  <!-- THE WALL: big cards on a wall backdrop -->
+  <div class="board" *ngIf="wall && activeTab === 'wall'">
+    <div class="grid">
+      <app-topic-card
+        *ngFor="let note of activeNotes"
+        [note]="note"
+        [now]="now"
+        [peeling]="isPeeling(note)"
+        (retest)="openRetest($event)"></app-topic-card>
+    </div>
+    <div class="empty" *ngIf="activeNotes.length === 0">
+      🎉 Your wall is clear. Every topic has been mastered.
     </div>
   </div>
 
   <!-- MASTERED -->
-  <div class="fame-grid" *ngIf="wall && activeTab === 'fame'">
-    <app-topic-card *ngFor="let note of fameNotes" [note]="note" [now]="now"></app-topic-card>
-    <div class="empty wide" *ngIf="fameNotes.length === 0">
+  <div class="board mastered-board" *ngIf="wall && activeTab === 'fame'">
+    <div class="grid">
+      <app-topic-card *ngFor="let note of fameNotes" [note]="note" [now]="now"></app-topic-card>
+    </div>
+    <div class="empty" *ngIf="fameNotes.length === 0">
       Nothing mastered yet. Retest a weak topic and drive it to 100% over several spaced sessions.
     </div>
   </div>
@@ -68,15 +66,14 @@
   <app-retest-dialog
     *ngIf="activeTopic"
     [note]="activeTopic"
-    (closed)="onRetestClosed($event)"></app-retest-dialog>
+    (closed)="onRetestClosed($event)"
+    (cancelled)="activeTopic = undefined"></app-retest-dialog>
 
   <!-- strategy settings -->
-  <app-strategy-settings
-    *ngIf="showStrategy"
-    (closed)="showStrategy = false"></app-strategy-settings>
+  <app-strategy-settings *ngIf="showStrategy" (closed)="showStrategy = false"></app-strategy-settings>
 
   <!-- graduate toast -->
   <div class="toast" *ngIf="justGraduated">
-    🎓 <b>{{ justGraduated.topicName }}</b> hit 100% — mastered and moved off your wall!
+    🎓 <b>{{ justGraduated.topicName }}</b> peeled off the wall — mastered!
   </div>
 </section>

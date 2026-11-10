@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { finalize } from 'rxjs/operators';
 import {
-  DEMO_USER, StickyNote, StickyState, WallColumn, WallResponse, stateForMastery
+  DEMO_USER, StickyNote, StickyState, WallResponse, isDue, stateForMastery
 } from '../../core/models/sticky-note.model';
 import { StickyNoteService } from '../../services/sticky-note.service';
 import { ClockService } from '../../services/clock.service';
@@ -23,6 +23,7 @@ export class WallComponent implements OnInit {
   activeTopic?: StickyNote;
   justGraduated?: StickyNote;
   showStrategy = false;
+  peelingIds = new Set<number>();
 
   constructor(
     private stickyNoteService: StickyNoteService,
@@ -38,8 +39,13 @@ export class WallComponent implements OnInit {
       .subscribe(wall => (this.wall = wall));
   }
 
-  get activeColumns(): WallColumn[] {
-    return this.wall ? this.wall.columns.filter(c => c.state !== StickyState.Peeled) : [];
+  /** All topics still on the wall, as one grid sorted weakest-first. */
+  get activeNotes(): StickyNote[] {
+    if (!this.wall) { return []; }
+    return this.wall.columns
+      .filter(c => c.state !== StickyState.Peeled)
+      .reduce((all, c) => all.concat(c.notes), [] as StickyNote[])
+      .sort((a, b) => a.state - b.state || a.mastery - b.mastery);
   }
 
   get fameNotes(): StickyNote[] {
@@ -48,8 +54,11 @@ export class WallComponent implements OnInit {
   }
 
   get dueCount(): number {
-    return this.activeColumns
-      .reduce((s, c) => s + c.notes.filter(n => !n.dueDate || new Date(n.dueDate) <= this.now).length, 0);
+    return this.activeNotes.filter(n => isDue(n.dueDate, this.now)).length;
+  }
+
+  isPeeling(note: StickyNote): boolean {
+    return this.peelingIds.has(note.stickyNoteId);
   }
 
   simulateDay(): void {
@@ -68,28 +77,36 @@ export class WallComponent implements OnInit {
     const prevState = note.state;
     note.mastery = result.newMastery;
     note.accuracyPct = result.newMastery;
-    note.state = stateForMastery(result.newMastery);
     note.lastTestedDate = this.now.toISOString();
 
     if (result.mastered) {
-      note.dueDate = null;
-      note.peeledDate = this.now.toISOString();
-      this.justGraduated = note;
-      setTimeout(() => (this.justGraduated = undefined), 2800);
-    } else {
-      // schedule the next spaced retest
-      let cooldown: number;
-      if (result.strong) {
-        note.strongStreak += 1;
-        cooldown = this.strategy.cooldownAfterStrong(note.strongStreak);
-      } else {
-        note.strongStreak = 0;
-        cooldown = this.strategy.current.weakInterval;
-      }
-      const due = new Date(this.now);
-      due.setDate(due.getDate() + cooldown);
-      note.dueDate = due.toISOString();
+      // play the peel-off in place, then move the card to Mastered
+      this.peelingIds.add(note.stickyNoteId);
+      setTimeout(() => {
+        note.state = StickyState.Peeled;
+        note.dueDate = null;
+        note.peeledDate = this.now.toISOString();
+        this.relocate(note, prevState);
+        this.peelingIds.delete(note.stickyNoteId);
+        this.justGraduated = note;
+        setTimeout(() => (this.justGraduated = undefined), 2800);
+      }, 1050);
+      return;
     }
+
+    // not mastered: update stage + schedule the next spaced retest
+    note.state = stateForMastery(result.newMastery);
+    let cooldown: number;
+    if (result.strong) {
+      note.strongStreak += 1;
+      cooldown = this.strategy.cooldownAfterStrong(note.strongStreak);
+    } else {
+      note.strongStreak = 0;
+      cooldown = this.strategy.current.weakInterval;
+    }
+    const due = new Date(this.now);
+    due.setDate(due.getDate() + cooldown);
+    note.dueDate = due.toISOString();
 
     if (note.state !== prevState) { this.relocate(note, prevState); }
   }
