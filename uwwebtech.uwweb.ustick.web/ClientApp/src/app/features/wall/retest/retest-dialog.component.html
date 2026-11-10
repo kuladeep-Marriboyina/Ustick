@@ -1,5 +1,7 @@
-<div class="overlay" (click)="mode === 'summary' ? finish() : null">
+<div class="overlay" (click)="closeDialog()">
   <div class="dialog" (click)="$event.stopPropagation()">
+
+    <button class="dialog-x" (click)="closeDialog()" aria-label="Close" title="Close (Esc)">✕</button>
 
     <!-- header: live mastery ring + topic -->
     <div class="dialog-head">

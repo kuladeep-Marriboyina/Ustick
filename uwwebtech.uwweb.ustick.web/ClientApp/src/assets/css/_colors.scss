@@ -49,6 +49,19 @@ $radius-lg: 18px;
 
 $font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
+// Stage gradients (big-card accents & rings)
+$grad-weak:    linear-gradient(135deg, #FF8A8E, #E5484D);
+$grad-improve: linear-gradient(135deg, #FFC24B, #E8910C);
+$grad-almost:  linear-gradient(135deg, #6FB4FF, #2F6BED);
+$grad-master:  linear-gradient(135deg, #46E39A, #12B76A);
+$grad-brand:   linear-gradient(135deg, #5B82FF, #2F6BED);
+
+// Wall backdrop
+$wall-bg:   #EDEFF4;
+$wall-dot:  rgba(16, 18, 24, 0.05);
+
+$radius-xl: 26px;
+
 // --- legacy aliases so older partials keep compiling ---
 $primary-text:      $text;
 $muted-grey:        $muted;

@@ -11,13 +11,25 @@ import {
 export class TopicCardComponent {
   @Input() note!: StickyNote;
   @Input() now: Date = new Date();
+  /** When true the card plays its peel-off animation (just mastered). */
+  @Input() peeling = false;
   @Output() retest = new EventEmitter<StickyNote>();
 
-  readonly ringRadius = 17;
-  readonly circumference = 2 * Math.PI * 17;
+  readonly ringRadius = 26;
+  readonly circumference = 2 * Math.PI * 26;
 
   get meta(): StageMeta {
     return STAGE_META[this.note.state];
+  }
+
+  get stageKey(): string {
+    switch (this.note.state) {
+      case StickyState.StuckHard: return 'weak';
+      case StickyState.Peeling: return 'improve';
+      case StickyState.AlmostGone: return 'almost';
+      case StickyState.Peeled: return 'master';
+      default: return 'weak';
+    }
   }
 
   get isMastered(): boolean {

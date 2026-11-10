@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { StickyNote, TopicQuestion } from '../../../core/models/sticky-note.model';
 import { StickyNoteService } from '../../../services/sticky-note.service';
 import { StrategyService } from '../../../services/strategy.service';
@@ -22,6 +22,17 @@ const MASTERY_FLOOR = 10;  // mastery never drops below this
 export class RetestDialogComponent implements OnInit {
   @Input() note!: StickyNote;
   @Output() closed = new EventEmitter<RetestResult>();
+  @Output() cancelled = new EventEmitter<void>();
+
+  @HostListener('document:keydown.escape')
+  onEscape(): void {
+    this.closeDialog();
+  }
+
+  /** ESC / ✕ / backdrop: apply if the retest is finished, otherwise discard it. */
+  closeDialog(): void {
+    if (this.mode === 'summary') { this.finish(); } else { this.cancelled.emit(); }
+  }
 
   mode: Mode = 'loading';
   questions: TopicQuestion[] = [];
